@@ -1,303 +1,327 @@
 ﻿# 02 Container Commands
 
 ## What is it
-A practical guide to Docker commands you will run daily.
+Container commands are the commands we use to create, run, inspect, and manage containers.
 
 ## Why do we need it
-Container commands are your daily control panel for running apps.
+Containers are the running part of Docker. If we cannot manage container lifecycle, the app cannot run reliably.
 
 ## Real life analogy
-Commands are like buttons on a machine. If you press the right button in the right order, work is smooth.
+If image is a recipe, a container is the kitchen currently cooking that recipe.
 
 ## How does it work
-- We start from inspection commands.
-- Then we run action commands.
-- We verify outputs after each step.
-- We clean up unused resources.
+- Create and run container from an image.
+- Check running and stopped containers.
+- Stop, restart, or remove containers.
+- Inspect logs and live resource usage.
 
-`mermaid
-flowchart TD
-    A[Inspect] --> B[Create]
-    B --> C[Run]
-    C --> D[Verify]
-    D --> E[Clean Up]
-`
+```mermaid
+flowchart LR
+  A[Run Container] --> B[List with ps]
+  B --> C[Inspect and Logs]
+  C --> D[Stop or Restart]
+  D --> E[Remove]
+```
 
 ## Code or Command Example
 ### WRONG way first
-`ash
-# WRONG: deleting resources without checking what they are
-docker system prune --force
-`
+```bash
+# WRONG: no name and no version tag
+docker run -d nginx
+```
 
 ### CORRECT way
-`ash
-# Check first, then prune carefully
-docker system df
-
-# Remove only dangling images first
-docker image prune --force
-`
+```bash
+# CORRECT: explicit name, tag, and published port
+docker run --detach --name myapp-web --publish 8080:80 nginx:1.27.0
+```
 
 Expected terminal output:
-`	ext
-TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
-Images          8         4         2.3GB     1.1GB (47%)
-Deleted Images:
-untagged: <none>:<none>
-`
+```text
+f1e2d3c4b5a6...
+```
 
 ## Command Reference
+
 ### docker run
-What it does: Creates and starts a container.
+What the command does in one line: Create and start a new container.
 
-Syntax:
-`ash
-docker run [FLAGS] IMAGE[:TAG] [COMMAND]
-`
+Full syntax:
+```bash
+docker run [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
+```
 
 Common flags:
-- $_
-- $_
-- $_
-- $_
-- $_
-- $_
-- $_
+- -d, --detach: Run in background.
+- -p, --publish: Map host port to container port.
+- -v, --volume: Mount volume or bind mount.
+- -e, --env: Set environment variable.
+- --name: Give container a readable name.
+- --rm: Auto-remove container on exit.
+- -it, --interactive --tty: Open interactive terminal session.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker run --name user-service --detach --publish 3000:3000 --env NODE_ENV=production node:18.20.4-alpine3.20
-`
+Real world example:
+```bash
+# Run user service in background with env and volume
+docker run --detach --name user-service --publish 3000:3000 --env NODE_ENV=production --volume user-data:/app/data node:18.20.4-alpine3.20
+```
 
 Expected output:
-`	ext
-a1b2c3d4e5f6
-`
-### docker ps / docker ps -a
-What it does: Lists running or all containers.
+```text
+a1b2c3d4e5f6...
+```
 
-Syntax:
-`ash
-docker ps --all
-`
+### docker ps and docker ps -a
+What the command does in one line: List running containers or all containers.
+
+Full syntax:
+```bash
+docker ps [OPTIONS]
+docker ps --all [OPTIONS]
+```
 
 Common flags:
-- $_
-- $_
+- -a, --all: Include stopped containers.
+- --filter: Filter by name, status, image, and more.
+- --format: Custom output format.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Show all containers for a specific service
 docker ps --all --filter name=user-service
-`
+```
 
 Expected output:
-`	ext
-CONTAINER ID   NAMES   STATUS
-`
+```text
+CONTAINER ID   NAMES          STATUS
+abc123...      user-service   Up 2 minutes
+```
+
 ### docker stop and docker kill
-What it does: Stops a container gracefully or forcefully.
+What the command does in one line: Stop gracefully or stop immediately.
 
-Syntax:
-`ash
-docker stop CONTAINER ; docker kill CONTAINER
-`
+Full syntax:
+```bash
+docker stop [OPTIONS] CONTAINER [CONTAINER...]
+docker kill [OPTIONS] CONTAINER [CONTAINER...]
+```
 
 Common flags:
-- $_
+- docker stop --time: Seconds to wait before force kill.
+- docker kill --signal: Signal to send.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker stop user-service
-`
+Real world example:
+```bash
+# Graceful stop
+docker stop --time 15 user-service
+
+# Immediate stop
+docker kill user-service
+```
 
 Expected output:
-`	ext
+```text
 user-service
-`
+```
+
 ### docker start and docker restart
-What it does: Starts a stopped container or restarts one.
+What the command does in one line: Start stopped container or restart running one.
 
-Syntax:
-`ash
-docker start CONTAINER ; docker restart CONTAINER
-`
+Full syntax:
+```bash
+docker start [OPTIONS] CONTAINER [CONTAINER...]
+docker restart [OPTIONS] CONTAINER [CONTAINER...]
+```
 
 Common flags:
-- $_
+- -a, --attach: Attach stdout and stderr.
+- -t, --time: Restart timeout in seconds.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker restart user-service
-`
+Real world example:
+```bash
+# Restart the service after config change
+docker restart --time 10 user-service
+```
 
 Expected output:
-`	ext
+```text
 user-service
-`
+```
+
 ### docker rm
-What it does: Removes container.
+What the command does in one line: Remove one or more containers.
 
-Syntax:
-`ash
-docker rm CONTAINER
-`
+Full syntax:
+```bash
+docker rm [OPTIONS] CONTAINER [CONTAINER...]
+```
 
 Common flags:
-- $_
+- -f, --force: Stop running container then remove.
+- -v, --volumes: Remove anonymous volumes.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Remove stopped container
 docker rm user-service
-`
+```
 
 Expected output:
-`	ext
+```text
 user-service
-`
-### docker exec -it
-What it does: Runs command inside running container.
+```
 
-Syntax:
-`ash
-docker exec --interactive --tty CONTAINER bash
-`
+### docker exec -it container bash
+What the command does in one line: Run command inside a running container.
+
+Full syntax:
+```bash
+docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+```
 
 Common flags:
-- $_
+- -i, --interactive: Keep STDIN open.
+- -t, --tty: Allocate pseudo terminal.
+- -u, --user: Run as specific user.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Open shell in running container
 docker exec --interactive --tty user-service sh
-`
+```
 
 Expected output:
-`	ext
+```text
 /app #
-`
-### docker logs
-What it does: Shows container logs.
+```
 
-Syntax:
-`ash
-docker logs [FLAGS] CONTAINER
-`
+### docker logs container
+What the command does in one line: Show container logs.
+
+Full syntax:
+```bash
+docker logs [OPTIONS] CONTAINER
+```
 
 Common flags:
-- $_
-- $_
+- -f, --follow: Stream logs in real time.
+- --tail: Show only last N lines.
+- --since: Show logs since timestamp.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Follow last 50 lines
 docker logs --follow --tail 50 user-service
-`
+```
 
 Expected output:
-`	ext
+```text
 Server listening on port 3000
-`
-### docker inspect
-What it does: Shows low-level container details.
+```
 
-Syntax:
-`ash
-docker inspect CONTAINER
-`
+### docker inspect container
+What the command does in one line: Show detailed container metadata.
+
+Full syntax:
+```bash
+docker inspect [OPTIONS] NAME|ID [NAME|ID...]
+```
 
 Common flags:
-- $_
+- -f, --format: Print selected values.
+- -s, --size: Add total file sizes.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Print container status only
 docker inspect user-service --format '{{.State.Status}}'
-`
+```
 
 Expected output:
-`	ext
+```text
 running
-`
+```
+
 ### docker cp
-What it does: Copies files to or from container.
+What the command does in one line: Copy files between host and container.
 
-Syntax:
-`ash
-docker cp SRC_PATH DEST_PATH
-`
+Full syntax:
+```bash
+docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH
+docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH
+```
 
 Common flags:
-- $_
+- -a, --archive: Preserve ownership.
+- -L, --follow-link: Always follow symlinks.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Copy logs from container to host
 docker cp user-service:/app/logs ./logs
-`
+```
 
 Expected output:
-`	ext
-(no output on success)
-`
-### docker stats
-What it does: Shows live CPU and memory usage.
+```text
+# No output on success
+```
 
-Syntax:
-`ash
-docker stats [CONTAINER]
-`
+### docker stats
+What the command does in one line: Show live CPU, memory, network, and I/O usage.
+
+Full syntax:
+```bash
+docker stats [OPTIONS] [CONTAINER...]
+```
 
 Common flags:
-- $_
+- --no-stream: Show one snapshot and exit.
+- --format: Custom output formatting.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Get one-time resource snapshot
 docker stats --no-stream user-service
-`
+```
 
 Expected output:
-`	ext
-CONTAINER CPU % MEM USAGE / LIMIT
-`
-
+```text
+CONTAINER      CPU %   MEM USAGE / LIMIT
+user-service   0.48%   52MiB / 1GiB
+```
 
 ## Common Mistakes
-- Running destructive commands before listing current resources.
-- Using old command syntax from random blog posts.
-- Ignoring command output and missing warning lines.
+- Confusing stop and kill behavior.
+- Using random container names, then losing track.
+- Debugging without checking logs and inspect output.
 
 ## Best Practices
-- Use explicit names and tags.
-- Inspect before remove.
-- Keep a cleanup routine in local development.
+- Always set --name and explicit image tags.
+- Use --rm for temporary helper containers.
+- Use docker stats and logs during debugging.
 
 ## When to use it
-Use these commands every day in development, testing, and debugging.
+Use these commands during daily development, debugging, testing, and local operations.
 
 ## Related concepts
 - [Containers](../02-core-concepts/02-containers.md)
-- [Networking](../07-networking/05-container-communication.md)
+- [Container Communication](../07-networking/05-container-communication.md)
 
 ## Quick Revision
-- 02 Container Commands is easier when you think in small building blocks.
-- We use specific versions and clear names to avoid surprises.
-- We test commands step by step and read outputs carefully.
-- We prefer safe defaults: least privilege, small images, persistent data paths.
-- Practice this file commands once, then repeat without looking.
+- Containers are running instances of images.
+- docker run is the main create and start command.
+- Logs, inspect, and stats are key debugging tools.
+- stop is graceful, kill is immediate.
+- Use clear names and tags for reliability.
 
 ## Interview Questions
-1. What is the main purpose of 
-   - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
-   - Skipping basics like tags, names, and ports, then guessing when things fail.
-3. How do you verify your setup works?
-   - Run inspect and logs commands, then test with a real request.
-4. When should you avoid this approach?
-   - Avoid it when a simpler option already solves your problem.
+1. What is the difference between docker stop and docker kill?
+   - stop tries graceful shutdown first, kill stops immediately.
+2. Why use --name in docker run?
+   - It makes management and scripting easier than random IDs.
+3. When do we use docker exec?
+   - We use it to run commands or open a shell inside a running container.
+4. What does --rm do?
+   - It removes the container automatically when it exits.
+5. Why is docker logs important?
+   - It is the first place to find runtime errors.

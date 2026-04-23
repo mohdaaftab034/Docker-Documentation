@@ -1,213 +1,232 @@
 ﻿# 05 System Commands
 
 ## What is it
-A practical guide to Docker commands you will run daily.
+System commands show Docker engine details, disk usage, and runtime events.
 
 ## Why do we need it
-System commands help you inspect environment health and reclaim disk space.
+These commands are essential for environment checks, cleanup, and debugging host-level Docker issues.
 
 ## Real life analogy
-Commands are like buttons on a machine. If you press the right button in the right order, work is smooth.
+System commands are like a control room dashboard that shows health, usage, and activity.
 
 ## How does it work
-- We start from inspection commands.
-- Then we run action commands.
-- We verify outputs after each step.
-- We clean up unused resources.
+- Check Docker client and engine versions.
+- Inspect system details.
+- Measure disk usage.
+- Watch real-time events.
+- Clean unused resources safely.
 
-`mermaid
-flowchart TD
-    A[Inspect] --> B[Create]
-    B --> C[Run]
-    C --> D[Verify]
-    D --> E[Clean Up]
-`
+```mermaid
+flowchart LR
+  A[Version and Info] --> B[Disk Usage]
+  B --> C[Events]
+  C --> D[Container Processes]
+  D --> E[Prune Cleanup]
+```
 
 ## Code or Command Example
 ### WRONG way first
-`ash
-# WRONG: deleting resources without checking what they are
-docker system prune --force
-`
+```bash
+# WRONG: prune everything before checking what is in use
+docker system prune --all --volumes --force
+```
 
 ### CORRECT way
-`ash
-# Check first, then prune carefully
-docker system df
+```bash
+# CORRECT: inspect first
+docker system df --verbose
 
-# Remove only dangling images first
-docker image prune --force
-`
+# Then prune with clear intent
+docker system prune --force
+```
 
 Expected terminal output:
-`	ext
-TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
-Images          8         4         2.3GB     1.1GB (47%)
-Deleted Images:
-untagged: <none>:<none>
-`
+```text
+TYPE            TOTAL   ACTIVE   SIZE      RECLAIMABLE
+Images          12      5        4.2GB     2.8GB (66%)
+Containers      7       3        120MB     95MB (79%)
+```
 
 ## Command Reference
+
 ### docker info
-What it does: Shows engine and system details.
+What the command does in one line: Display Docker daemon and host information.
 
-Syntax:
-`ash
-docker info
-`
+Full syntax:
+```bash
+docker info [OPTIONS]
+```
 
 Common flags:
-- $_
+- --format: Format output with templates.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Print server version only
 docker info --format '{{.ServerVersion}}'
-`
+```
 
 Expected output:
-`	ext
+```text
 27.1.1
-`
+```
+
 ### docker version
-What it does: Shows client and server versions.
+What the command does in one line: Show client and server API versions.
 
-Syntax:
-`ash
-docker version
-`
+Full syntax:
+```bash
+docker version [OPTIONS]
+```
 
 Common flags:
-- $_
+- --format: Custom format output.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Check both client and server versions
 docker version
-`
+```
 
 Expected output:
-`	ext
-Client: ... Server: ...
-`
+```text
+Client: Docker Engine - Community
+ Version:           27.1.1
+Server: Docker Engine - Community
+ Version:           27.1.1
+```
+
 ### docker system df
-What it does: Shows Docker disk usage.
+What the command does in one line: Show Docker disk usage.
 
-Syntax:
-`ash
-docker system df
-`
+Full syntax:
+```bash
+docker system df [OPTIONS]
+```
 
 Common flags:
-- $_
+- -v, --verbose: Detailed usage by object.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# View detailed disk usage before cleanup
 docker system df --verbose
-`
+```
 
 Expected output:
-`	ext
-Images: ... Containers: ...
-`
+```text
+Images space usage:
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+...
+```
+
 ### docker system prune
-What it does: Removes unused resources.
+What the command does in one line: Remove unused data (stopped containers, unused networks, dangling images, and build cache).
 
-Syntax:
-`ash
+Full syntax:
+```bash
+docker system prune [OPTIONS]
+```
+
+Common flags:
+- -a, --all: Remove all unused images, not only dangling.
+- --volumes: Also remove anonymous volumes.
+- -f, --force: Do not prompt confirmation.
+
+Real world example:
+```bash
+# Standard cleanup without touching all image tags
 docker system prune --force
-`
-
-Common flags:
-- $_
-- $_
-
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker system prune --all --volumes --force
-`
+```
 
 Expected output:
-`	ext
-Total reclaimed space: ...
-`
+```text
+Deleted Containers:
+...
+Deleted Networks:
+...
+Total reclaimed space: 1.8GB
+```
+
 ### docker events
-What it does: Streams real-time events from daemon.
+What the command does in one line: Stream Docker daemon events in real time.
 
-Syntax:
-`ash
-docker events
-`
+Full syntax:
+```bash
+docker events [OPTIONS]
+```
 
 Common flags:
-- $_
-- $_
+- --since: Show events since a timestamp.
+- --until: Stop at a timestamp.
+- --filter: Filter event stream.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Watch container events only
 docker events --filter type=container
-`
+```
 
 Expected output:
-`	ext
-2026-04-23T... container start
-`
-### docker top
-What it does: Shows processes inside container.
+```text
+2026-04-23T10:15:14.000000000Z container start user-service
+```
 
-Syntax:
-`ash
-docker top CONTAINER
-`
+### docker top
+What the command does in one line: Show running processes inside a container.
+
+Full syntax:
+```bash
+docker top CONTAINER [ps OPTIONS]
+```
 
 Common flags:
-- $_
+- ps OPTIONS: Optional process listing flags, for example aux.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# See container process list
 docker top user-service
-`
+```
 
 Expected output:
-`	ext
-PID USER TIME COMMAND
-`
-
+```text
+PID     USER     TIME     COMMAND
+12345   root     0:00     node server.js
+```
 
 ## Common Mistakes
-- Running destructive commands before listing current resources.
-- Using old command syntax from random blog posts.
-- Ignoring command output and missing warning lines.
+- Running prune commands without checking impact.
+- Ignoring version mismatch between client and server.
+- Debugging container issues without events or top.
 
 ## Best Practices
-- Use explicit names and tags.
-- Inspect before remove.
-- Keep a cleanup routine in local development.
+- Run docker info and docker version after setup changes.
+- Use docker system df regularly to avoid disk surprises.
+- Use targeted cleanup before aggressive prune.
 
 ## When to use it
-Use these commands every day in development, testing, and debugging.
+Use system commands for diagnostics, housekeeping, and environment validation.
 
 ## Related concepts
 - [Installation and Setup](../01-introduction/05-installation-and-setup.md)
 - [Troubleshooting Guide](../11-interview-prep/03-troubleshooting-guide.md)
 
 ## Quick Revision
-- 05 System Commands is easier when you think in small building blocks.
-- We use specific versions and clear names to avoid surprises.
-- We test commands step by step and read outputs carefully.
-- We prefer safe defaults: least privilege, small images, persistent data paths.
-- Practice this file commands once, then repeat without looking.
+- System commands give host-level Docker visibility.
+- Always inspect usage before cleanup.
+- Events help track runtime behavior.
+- top shows processes inside container.
+- Good housekeeping prevents disk and stability problems.
 
 ## Interview Questions
-1. What is the main purpose of 
-   - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
-   - Skipping basics like tags, names, and ports, then guessing when things fail.
-3. How do you verify your setup works?
-   - Run inspect and logs commands, then test with a real request.
-4. When should you avoid this approach?
-   - Avoid it when a simpler option already solves your problem.
+1. Why is docker system df important?
+   - It shows where Docker disk space is being used.
+2. What is the risk of docker system prune --all --volumes?
+   - It may remove data and images you still need.
+3. When do we use docker events?
+   - To monitor real-time lifecycle events for debugging.
+4. What does docker top show?
+   - The running process list inside a container.
+5. Why compare docker info and docker version outputs?
+   - To verify daemon health and client-server compatibility.

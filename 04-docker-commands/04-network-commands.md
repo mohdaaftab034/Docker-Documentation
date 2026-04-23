@@ -1,232 +1,248 @@
 ﻿# 04 Network Commands
 
 ## What is it
-A practical guide to Docker commands you will run daily.
+Network commands manage how containers communicate with each other and with the outside world.
 
 ## Why do we need it
-Network commands connect services safely and predictably.
+By default, containers are isolated. Networking commands connect services safely and predictably.
 
 ## Real life analogy
-Commands are like buttons on a machine. If you press the right button in the right order, work is smooth.
+Networks are like roads between buildings. Without roads, the buildings exist but cannot exchange anything.
 
 ## How does it work
-- We start from inspection commands.
-- Then we run action commands.
-- We verify outputs after each step.
-- We clean up unused resources.
+- Create a network.
+- Attach containers to that network.
+- Inspect routes and connected endpoints.
+- Disconnect and remove when no longer needed.
 
-`mermaid
-flowchart TD
-    A[Inspect] --> B[Create]
-    B --> C[Run]
-    C --> D[Verify]
-    D --> E[Clean Up]
-`
+```mermaid
+flowchart LR
+  A[Create Network] --> B[Connect Containers]
+  B --> C[Service to Service Calls]
+  C --> D[Inspect]
+  D --> E[Disconnect and Cleanup]
+```
 
 ## Code or Command Example
 ### WRONG way first
-`ash
-# WRONG: deleting resources without checking what they are
-docker system prune --force
-`
+```bash
+# WRONG: assuming containers can always reach each other by name on default bridge
+docker run --name user-service --detach node:18.20.4-alpine3.20
+docker run --name billing-service --detach node:18.20.4-alpine3.20
+```
 
 ### CORRECT way
-`ash
-# Check first, then prune carefully
-docker system df
-
-# Remove only dangling images first
-docker image prune --force
-`
+```bash
+# CORRECT: create a custom network and place both containers on it
+docker network create app-net
+docker run --name user-service --detach --network app-net node:18.20.4-alpine3.20
+docker run --name billing-service --detach --network app-net node:18.20.4-alpine3.20
+```
 
 Expected terminal output:
-`	ext
-TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
-Images          8         4         2.3GB     1.1GB (47%)
-Deleted Images:
-untagged: <none>:<none>
-`
+```text
+app-net
+<container-id>
+<container-id>
+```
 
 ## Command Reference
+
 ### docker network create
-What it does: Creates a network.
+What the command does in one line: Create a new Docker network.
 
-Syntax:
-`ash
-docker network create NETWORK_NAME
-`
+Full syntax:
+```bash
+docker network create [OPTIONS] NETWORK
+```
 
 Common flags:
-- $_
+- --driver: Set driver, for example bridge.
+- --subnet: Set custom subnet.
+- --gateway: Set network gateway.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker network create app-net
-`
+Real world example:
+```bash
+# Create app network with bridge driver
+docker network create --driver bridge app-net
+```
 
 Expected output:
-`	ext
+```text
 app-net
-`
+```
+
 ### docker network ls
-What it does: Lists networks.
+What the command does in one line: List Docker networks.
 
-Syntax:
-`ash
-docker network ls
-`
+Full syntax:
+```bash
+docker network ls [OPTIONS]
+```
 
 Common flags:
-- $_
+- --filter: Filter by driver or name.
+- --format: Custom output formatting.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker network ls --filter name=app
-`
+Real world example:
+```bash
+# Show only bridge networks
+docker network ls --filter driver=bridge
+```
 
 Expected output:
-`	ext
-NETWORK ID NAME DRIVER
-`
+```text
+NETWORK ID     NAME      DRIVER
+abc123def456   app-net   bridge
+```
+
 ### docker network inspect
-What it does: Shows network details and connected containers.
+What the command does in one line: Show detailed network information.
 
-Syntax:
-`ash
-docker network inspect NETWORK_NAME
-`
+Full syntax:
+```bash
+docker network inspect [OPTIONS] NETWORK [NETWORK...]
+```
 
 Common flags:
-- $_
+- -f, --format: Print specific fields.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Inspect connected containers
 docker network inspect app-net
-`
+```
 
 Expected output:
-`	ext
-Containers: { ... }
-`
+```text
+"Containers": {
+  "user-service": {...},
+  "billing-service": {...}
+}
+```
+
 ### docker network connect
-What it does: Connects container to network.
+What the command does in one line: Connect an existing container to a network.
 
-Syntax:
-`ash
-docker network connect NETWORK_NAME CONTAINER
-`
+Full syntax:
+```bash
+docker network connect [OPTIONS] NETWORK CONTAINER
+```
 
 Common flags:
-- $_
+- --alias: Add extra DNS alias inside network.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Attach existing container to app network
 docker network connect app-net user-service
-`
+```
 
 Expected output:
-`	ext
-(no output on success)
-`
+```text
+# No output on success
+```
+
 ### docker network disconnect
-What it does: Disconnects container from network.
+What the command does in one line: Disconnect container from a network.
 
-Syntax:
-`ash
-docker network disconnect NETWORK_NAME CONTAINER
-`
+Full syntax:
+```bash
+docker network disconnect [OPTIONS] NETWORK CONTAINER
+```
 
 Common flags:
-- $_
+- -f, --force: Force disconnect.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Remove container from app network
 docker network disconnect app-net user-service
-`
+```
 
 Expected output:
-`	ext
-(no output on success)
-`
+```text
+# No output on success
+```
+
 ### docker network rm
-What it does: Removes unused network.
+What the command does in one line: Remove one or more unused networks.
 
-Syntax:
-`ash
-docker network rm NETWORK_NAME
-`
+Full syntax:
+```bash
+docker network rm NETWORK [NETWORK...]
+```
 
 Common flags:
-- $_
+- No major flags for basic usage.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
-docker network rm old-net
-`
+Real world example:
+```bash
+# Remove network after containers are detached
+docker network rm app-net
+```
 
 Expected output:
-`	ext
-old-net
-`
+```text
+app-net
+```
+
 ### docker network prune
-What it does: Removes unused networks.
+What the command does in one line: Remove all unused networks.
 
-Syntax:
-`ash
-docker network prune --force
-`
+Full syntax:
+```bash
+docker network prune [OPTIONS]
+```
 
 Common flags:
-- $_
+- -f, --force: Skip confirmation prompt.
+- --filter: Apply filters.
 
-Real-world example:
-`ash
-# Explain: use a specific image tag for reproducible runs
+Real world example:
+```bash
+# Clean unused networks
 docker network prune --force
-`
+```
 
 Expected output:
-`	ext
-Deleted Networks: ...
-`
-
+```text
+Deleted Networks:
+...
+```
 
 ## Common Mistakes
-- Running destructive commands before listing current resources.
-- Using old command syntax from random blog posts.
-- Ignoring command output and missing warning lines.
+- Assuming localhost inside one container means host or another container.
+- Forgetting to place related containers on same network.
+- Deleting networks while active containers still use them.
 
 ## Best Practices
-- Use explicit names and tags.
-- Inspect before remove.
-- Keep a cleanup routine in local development.
+- Use custom bridge network for app services.
+- Use service names as hostnames on same network.
+- Inspect network when debugging connection issues.
 
 ## When to use it
-Use these commands every day in development, testing, and debugging.
+Use network commands whenever two or more containers must communicate.
 
 ## Related concepts
 - [Networks](../02-core-concepts/05-networks.md)
 - [Custom Networks](../07-networking/04-custom-networks.md)
 
 ## Quick Revision
-- 04 Network Commands is easier when you think in small building blocks.
-- We use specific versions and clear names to avoid surprises.
-- We test commands step by step and read outputs carefully.
-- We prefer safe defaults: least privilege, small images, persistent data paths.
-- Practice this file commands once, then repeat without looking.
+- Networks connect isolated containers.
+- Custom bridge network is best for local multi-service apps.
+- Inspect reveals IP, aliases, and connected containers.
+- Connect and disconnect are dynamic operations.
+- Clean old networks with prune carefully.
 
 ## Interview Questions
-1. What is the main purpose of 
-   - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
-   - Skipping basics like tags, names, and ports, then guessing when things fail.
-3. How do you verify your setup works?
-   - Run inspect and logs commands, then test with a real request.
-4. When should you avoid this approach?
-   - Avoid it when a simpler option already solves your problem.
+1. Why is custom bridge better than default bridge for most apps?
+   - It gives better isolation and automatic DNS by container name.
+2. Can two containers communicate without same network?
+   - Usually no, they need shared network or published host ports.
+3. What does docker network inspect help with?
+   - It helps debug connectivity, IP assignment, and attached containers.
+4. When do we use docker network connect?
+   - When we need to attach an existing container to another network.
+5. What is a common localhost mistake?
+   - localhost inside container points to that container, not host or other services.
