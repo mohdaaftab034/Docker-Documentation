@@ -140,8 +140,8 @@ If auth fails, validate MYSQL_USER, MYSQL_PASSWORD, and init script order.
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Named Volumes](../08-storage/02-named-volumes.md)
-- - [Container Communication](../07-networking/05-container-communication.md)
+- [Named Volumes](../08-storage/02-named-volumes.md)
+- [Container Communication](../07-networking/05-container-communication.md)
 
 ## Quick Revision
 - 04 MySQL with Docker is easier when you think in small building blocks.

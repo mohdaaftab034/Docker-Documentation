@@ -175,7 +175,8 @@ docker top user-service
 Expected output:
 `	ext
 PID USER TIME COMMAND
-`
+`
+
 
 ## Common Mistakes
 - Running destructive commands before listing current resources.
@@ -191,8 +192,8 @@ PID USER TIME COMMAND
 Use these commands every day in development, testing, and debugging.
 
 ## Related concepts
-- - [Installation and Setup](../01-introduction/05-installation-and-setup.md)
-- - [Troubleshooting Guide](../11-interview-prep/03-troubleshooting-guide.md)
+- [Installation and Setup](../01-introduction/05-installation-and-setup.md)
+- [Troubleshooting Guide](../11-interview-prep/03-troubleshooting-guide.md)
 
 ## Quick Revision
 - 05 System Commands is easier when you think in small building blocks.

@@ -265,7 +265,8 @@ docker stats --no-stream user-service
 Expected output:
 `	ext
 CONTAINER CPU % MEM USAGE / LIMIT
-`
+`
+
 
 ## Common Mistakes
 - Running destructive commands before listing current resources.
@@ -281,8 +282,8 @@ CONTAINER CPU % MEM USAGE / LIMIT
 Use these commands every day in development, testing, and debugging.
 
 ## Related concepts
-- - [Containers](../02-core-concepts/02-containers.md)
-- - [Networking](../07-networking/05-container-communication.md)
+- [Containers](../02-core-concepts/02-containers.md)
+- [Networking](../07-networking/05-container-communication.md)
 
 ## Quick Revision
 - 02 Container Commands is easier when you think in small building blocks.

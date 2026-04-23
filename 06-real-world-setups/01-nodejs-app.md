@@ -195,8 +195,8 @@ Expected terminal output:
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Multistage Builds](../03-dockerfile-deep-dive/04-multistage-builds.md)
-- - [Compose Commands](../05-docker-compose/05-compose-commands.md)
+- [Multistage Builds](../03-dockerfile-deep-dive/04-multistage-builds.md)
+- [Compose Commands](../05-docker-compose/05-compose-commands.md)
 
 ## Quick Revision
 - 01 Node.js App is easier when you think in small building blocks.

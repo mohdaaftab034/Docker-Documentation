@@ -173,7 +173,8 @@ docker run --name postgres-db --detach --volume postgres-db-data:/var/lib/postgr
 Expected output:
 `	ext
 Container started
-`
+`
+
 
 ## Common Mistakes
 - Running destructive commands before listing current resources.
@@ -189,8 +190,8 @@ Container started
 Use these commands every day in development, testing, and debugging.
 
 ## Related concepts
-- - [Volumes](../02-core-concepts/04-volumes.md)
-- - [Data Persistence Patterns](../08-storage/05-data-persistence-patterns.md)
+- [Volumes](../02-core-concepts/04-volumes.md)
+- [Data Persistence Patterns](../08-storage/05-data-persistence-patterns.md)
 
 ## Quick Revision
 - 03 Volume Commands is easier when you think in small building blocks.

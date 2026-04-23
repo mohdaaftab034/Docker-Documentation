@@ -141,8 +141,8 @@ If refreshing route returns 404, fix nginx.conf with try_files rule for SPA.
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Multistage Builds](../03-dockerfile-deep-dive/04-multistage-builds.md)
-- - [Nginx Reverse Proxy](06-nginx-reverse-proxy.md)
+- [Multistage Builds](../03-dockerfile-deep-dive/04-multistage-builds.md)
+- [Nginx Reverse Proxy](06-nginx-reverse-proxy.md)
 
 ## Quick Revision
 - 03 React App is easier when you think in small building blocks.

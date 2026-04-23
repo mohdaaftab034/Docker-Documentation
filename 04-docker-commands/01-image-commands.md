@@ -239,7 +239,8 @@ docker history myapp:1.0.0
 Expected output:
 `	ext
 IMAGE   CREATED BY   SIZE
-`
+`
+
 
 ## Common Mistakes
 - Running destructive commands before listing current resources.
@@ -255,8 +256,8 @@ IMAGE   CREATED BY   SIZE
 Use these commands every day in development, testing, and debugging.
 
 ## Related concepts
-- - [Images](../02-core-concepts/01-images.md)
-- - [Docker Registry](../02-core-concepts/06-docker-registry.md)
+- [Images](../02-core-concepts/01-images.md)
+- [Docker Registry](../02-core-concepts/06-docker-registry.md)
 
 ## Quick Revision
 - 01 Image Commands is easier when you think in small building blocks.

@@ -136,8 +136,8 @@ If Node app cannot connect, ensure it uses hostname mongo-db not localhost insid
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Networks](../02-core-concepts/05-networks.md)
-- - [Named Volumes](../08-storage/02-named-volumes.md)
+- [Networks](../02-core-concepts/05-networks.md)
+- [Named Volumes](../08-storage/02-named-volumes.md)
 
 ## Quick Revision
 - 05 MongoDB with Docker is easier when you think in small building blocks.

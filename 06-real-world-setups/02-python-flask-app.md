@@ -147,8 +147,8 @@ Common fix: pin dependency versions in requirements.txt and rebuild without cach
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Base Images](../03-dockerfile-deep-dive/02-base-images.md)
-- - [Resource Limits](../09-docker-in-production/05-resource-limits.md)
+- [Base Images](../03-dockerfile-deep-dive/02-base-images.md)
+- [Resource Limits](../09-docker-in-production/05-resource-limits.md)
 
 ## Quick Revision
 - 02 Python Flask App is easier when you think in small building blocks.

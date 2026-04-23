@@ -183,8 +183,8 @@ If frontend cannot call backend, verify Nginx route rules and backend hostname.
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Multi Container App](../05-docker-compose/06-multi-container-app.md)
-- - [Production Best Practices](../09-docker-in-production/01-production-best-practices.md)
+- [Multi Container App](../05-docker-compose/06-multi-container-app.md)
+- [Production Best Practices](../09-docker-in-production/01-production-best-practices.md)
 
 ## Quick Revision
 - 07 Fullstack App is easier when you think in small building blocks.

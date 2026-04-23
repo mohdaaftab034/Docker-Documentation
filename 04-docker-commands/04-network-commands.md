@@ -194,7 +194,8 @@ docker network prune --force
 Expected output:
 `	ext
 Deleted Networks: ...
-`
+`
+
 
 ## Common Mistakes
 - Running destructive commands before listing current resources.
@@ -210,8 +211,8 @@ Deleted Networks: ...
 Use these commands every day in development, testing, and debugging.
 
 ## Related concepts
-- - [Networks](../02-core-concepts/05-networks.md)
-- - [Custom Networks](../07-networking/04-custom-networks.md)
+- [Networks](../02-core-concepts/05-networks.md)
+- [Custom Networks](../07-networking/04-custom-networks.md)
 
 ## Quick Revision
 - 04 Network Commands is easier when you think in small building blocks.

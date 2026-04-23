@@ -142,8 +142,8 @@ If 502 appears, check upstream service names and container health.
 Use this setup when your team wants one clear, repeatable start command for local dev and deployment.
 
 ## Related concepts
-- - [Custom Networks](../07-networking/04-custom-networks.md)
-- - [Security Hardening](../09-docker-in-production/02-security-hardening.md)
+- [Custom Networks](../07-networking/04-custom-networks.md)
+- [Security Hardening](../09-docker-in-production/02-security-hardening.md)
 
 ## Quick Revision
 - 06 Nginx Reverse Proxy is easier when you think in small building blocks.

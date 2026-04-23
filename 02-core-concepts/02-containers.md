@@ -83,10 +83,10 @@ a1b2c3d4e5f6   myapp-web   nginx:1.27.0   0.0.0.0:8080->80/tcp   Up 5 seconds
 Use this whenever you want predictable local development and easy transition to staging and production.
 
 ## Related concepts
-- - [Images](../02-core-concepts/01-images.md)
-- - [Containers](../02-core-concepts/02-containers.md)
-- - [Dockerfile](../02-core-concepts/03-dockerfile.md)
-- - [Docker Compose](../05-docker-compose/01-what-is-docker-compose.md)
+- [Images](../02-core-concepts/01-images.md)
+- [Containers](../02-core-concepts/02-containers.md)
+- [Dockerfile](../02-core-concepts/03-dockerfile.md)
+- [Docker Compose](../05-docker-compose/01-what-is-docker-compose.md)
 
 ## Quick Revision
 - 02 Containers is easier when you think in small building blocks.

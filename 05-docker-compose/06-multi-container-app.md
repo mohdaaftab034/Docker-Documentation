@@ -83,8 +83,8 @@ a1b2c3d4e5f6   myapp-web   nginx:1.27.0   0.0.0.0:8080->80/tcp   Up 5 seconds
 Use Compose whenever you run two or more related services in local or staging environments.
 
 ## Related concepts
-- - [Compose File Structure](02-compose-file-structure.md)
-- - [Container Communication](../07-networking/05-container-communication.md)
+- [Compose File Structure](02-compose-file-structure.md)
+- [Container Communication](../07-networking/05-container-communication.md)
 
 ## Quick Revision
 - 06 Multi Container App is easier when you think in small building blocks.
@@ -155,4 +155,5 @@ services:
 
 volumes:
   mongo-data:
-`
+`
+
