@@ -21,25 +21,25 @@ Think of a restaurant kitchen chain. Every branch follows the same recipe card, 
 - Add Compose when multiple services are needed.
 - Verify by checking logs, health, and API response.
 
-`mermaid
+```mermaid
 flowchart LR
     Code[Source Code] --> Dockerfile[Dockerfile]
     Dockerfile --> Build[Docker Build]
     Build --> Image[Versioned Image]
     Image --> Run[Container Runtime]
     Run --> Verify[Logs + HTTP Test]
-`
+```
 
 ## Code or Command Example
 ### WRONG way first
-`ash
+```bash
 # WRONG: using latest and missing clear container name
 docker build -t myapp:latest .
 docker run -p 3000:3000 myapp:latest
-`
+```
 
 ### CORRECT way
-`ash
+```bash
 # Build with a specific tag for reproducible results
 docker build --tag myapp:1.0.0 .
 
@@ -48,18 +48,18 @@ docker run --name myapp-api --publish 3000:3000 --detach --restart unless-stoppe
 
 # Confirm container is healthy and running
 docker ps --filter name=myapp-api
-`
+```
 
 Expected terminal output:
-`	ext
+```text
 [+] Building 18.2s (12/12) FINISHED
 Successfully tagged myapp:1.0.0
 CONTAINER ID   NAMES      IMAGE        STATUS
 f1e2d3c4b5a6   myapp-api  myapp:1.0.0  Up 6 seconds
-`
+```
 
 ### Dockerfile
-`dockerfile
+```dockerfile
 # Stage 1: dependencies and build tools
 FROM node:18.20.4-alpine3.20 AS build
 
@@ -107,10 +107,10 @@ EXPOSE 3000
 
 # Start application
 CMD ["node", "dist/server.js"]
-`
+```
 
 ### .dockerignore
-`gitignore
+```gitignore
 # Node and package manager folders should not enter build context
 node_modules
 
@@ -123,10 +123,10 @@ node_modules
 # Build output from local machine should not be copied
 dist
 coverage
-`
+```
 
 ### docker-compose.yml
-`yaml
+```yaml
 version: "3.9"
 services:
   user-service:
@@ -143,10 +143,10 @@ services:
       - ./:/app
       - /app/node_modules
     command: ["npm", "run", "dev"]
-`
+```
 
 ### Step-by-step commands
-`ash
+```bash
 # Build image for production path
 docker build --tag user-service:1.0.0 .
 
@@ -155,15 +155,15 @@ docker run --name user-service --publish 3000:3000 --detach user-service:1.0.0
 
 # Start development stack with hot reload
 docker compose up --detach
-`
+```
 
 Expected terminal output:
-`	ext
+```text
 [+] Running 3/3
  âœ” Network app-net      Created
  âœ” Volume app-data      Created
  âœ” Container myapp-api  Started
-`
+```
 
 ## How to verify it is working
 1. Run curl http://localhost:3000/health and expect status 200.
@@ -206,9 +206,9 @@ Use this setup when your team wants one clear, repeatable start command for loca
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.

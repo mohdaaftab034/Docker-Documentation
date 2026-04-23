@@ -14,12 +14,12 @@ Like packing for travel: if you pack the wrong things, your trip becomes stressf
 - Understand what goes wrong.
 - Apply the fix with command or config.
 
-`mermaid
+```mermaid
 flowchart TD
     A[Mistake] --> B[Symptom]
     B --> C[Root Cause]
     C --> D[Fix]
-`
+```
 
 ## Mistakes and Fixes
 1. Using latest tag everywhere.
@@ -49,15 +49,15 @@ flowchart TD
 
 ## Code or Command Example
 ### WRONG
-`dockerfile
+```dockerfile
 FROM node:18
 COPY . .
 RUN npm install
 CMD ["npm", "start"]
-`
+```
 
 ### CORRECT
-`dockerfile
+```dockerfile
 FROM node:18.20.4-alpine3.20
 WORKDIR /app
 COPY package*.json ./
@@ -65,12 +65,12 @@ RUN npm ci --omit=dev
 COPY . .
 USER node
 CMD ["node", "server.js"]
-`
+```
 
 Expected output:
-`	ext
+```text
 Smaller image size, faster rebuilds, and improved security posture.
-`
+```
 
 ## Common Mistakes
 - Assuming defaults are safe for production.
@@ -96,9 +96,9 @@ Use this checklist before merging Docker changes.
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.

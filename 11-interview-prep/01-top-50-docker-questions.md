@@ -113,19 +113,19 @@
     - build, test, push, deploy.
 
 ## Example commands
-`ash
+```bash
 # Build and tag versioned image
 docker build --tag myuser/user-service:1.0.0 .
 
 # Push to registry
 docker push myuser/user-service:1.0.0
-`
+```
 
 Expected output:
-`	ext
+```text
 Successfully tagged myuser/user-service:1.0.0
 The push refers to repository [docker.io/myuser/user-service]
-`
+```
 
 ## Quick Revision
 - Top 50 Docker Questions is easier when you think in small building blocks.
@@ -135,9 +135,9 @@ The push refers to repository [docker.io/myuser/user-service]
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.

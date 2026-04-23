@@ -11,14 +11,14 @@ If you are starting from absolute zero, this repo gives you a clear path from fi
 - Curiosity and patience
 
 ## Beginner to Job Ready Roadmap
-`mermaid
+```mermaid
 flowchart LR
     A[Zero Knowledge] --> B[Docker Basics]
     B --> C[Dockerfile Skills]
     C --> D[Compose Multi-Service]
     D --> E[Production Practices]
     E --> F[CI/CD + Interview Ready]
-`
+```
 
 ## How to Use This Repository
 1. Read each section in order.

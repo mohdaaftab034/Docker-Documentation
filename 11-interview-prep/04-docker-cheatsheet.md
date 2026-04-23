@@ -50,7 +50,7 @@
 - --detach, --publish, --volume, --env, --name, --rm, --interactive, --tty.
 
 ## docker-compose.yml structure
-`yaml
+```yaml
 services:
   app:
     image: myapp:1.0.0
@@ -62,7 +62,7 @@ networks:
   app-net:
 volumes:
   app-data:
-`
+```
 
 ## Quick Revision
 - Docker Cheatsheet is easier when you think in small building blocks.
@@ -72,9 +72,9 @@ volumes:
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.

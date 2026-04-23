@@ -14,20 +14,20 @@ Like diagnosing a car: noise, dashboard warning, then targeted repair.
 - Check logs, inspect, and network.
 - Apply fix and verify.
 
-`mermaid
+```mermaid
 flowchart LR
     Symptom --> Diagnose --> Fix --> Verify
-`
+```
 
 ## Cases
 1. Container exits immediately
    - Cause: main process ends.
    - Fix: run correct long-lived command.
    - Commands:
-`ash
+```bash
 docker logs user-service
 docker inspect user-service --format '{{.State.ExitCode}}'
-`
+```
 2. Port already in use
    - Cause: host port occupied.
    - Fix: map different host port or stop conflicting process.
@@ -49,13 +49,13 @@ docker inspect user-service --format '{{.State.ExitCode}}'
 
 ## Code or Command Example
 ### WRONG
-`ash
+```bash
 # Deleting everything without checking
 docker system prune --all --volumes --force
-`
+```
 
 ### CORRECT
-`ash
+```bash
 # Inspect disk use first
 docker system df --verbose
 
@@ -64,12 +64,12 @@ docker image prune --force
 
 # Remove stopped containers
 docker container prune --force
-`
+```
 
 Expected output:
-`	ext
+```text
 Reclaimed space appears and active resources remain untouched.
-`
+```
 
 ## Common Mistakes
 - Skipping logs.
@@ -94,9 +94,9 @@ Use during local debugging and production incident triage.
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.

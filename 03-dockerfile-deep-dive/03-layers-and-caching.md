@@ -28,7 +28,7 @@ Think of a shipping company. The box shape is always standard, but the items ins
 - Wrong vs correct Dockerfile order.
 - docker history.
 
-`mermaid
+```mermaid
 flowchart LR
     Dev[Developer Laptop] --> CLI[Docker CLI]
     CLI --> Engine[Docker Engine]
@@ -36,18 +36,18 @@ flowchart LR
     Engine --> Container[Running Container]
     Container --> Volume[Persistent Volume]
     Container --> Network[Docker Network]
-`
+```
 
 ## Code or Command Example
 ### WRONG way first
-`ash
+```bash
 # WRONG: running with unclear names and no version tag
 # This creates confusion when multiple containers are running.
 docker run myapp
-`
+```
 
 ### CORRECT way
-`ash
+```bash
 # Pull a specific version so every machine gets the same image
 docker pull nginx:1.27.0
 
@@ -56,17 +56,17 @@ docker run --name myapp-web --publish 8080:80 --detach nginx:1.27.0
 
 # List running containers with useful columns
 docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}"
-`
+```
 
 Expected terminal output:
-`	ext
+```text
 1.27.0: Pulling from library/nginx
 Digest: sha256:...
 Status: Downloaded newer image for nginx:1.27.0
 
 CONTAINER ID   NAMES       IMAGE          PORTS                  STATUS
 a1b2c3d4e5f6   myapp-web   nginx:1.27.0   0.0.0.0:8080->80/tcp   Up 5 seconds
-`
+```
 
 ## Common Mistakes
 - Using latest tags and getting unexpected changes.
@@ -97,9 +97,9 @@ Use this whenever you want predictable local development and easy transition to 
 - Practice this file commands once, then repeat without looking.
 
 ## Interview Questions
-1. What is the main purpose of 
+1. What is the main purpose of this concept?
    - It solves repeatability and clarity so teams can run the same app the same way.
-2. What beginner mistake is most common in 
+2. What beginner mistake is most common in this concept?
    - Skipping basics like tags, names, and ports, then guessing when things fail.
 3. How do you verify your setup works?
    - Run inspect and logs commands, then test with a real request.
